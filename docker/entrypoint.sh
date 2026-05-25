@@ -73,8 +73,29 @@ echo "[start] Corriendo migraciones..."
 LOCK_FILE="/var/www/html/storage/app/.migrate_lock"
 CURRENT_HASH=$(find /var/www/html/database/migrations -name "*.php" | sort | xargs md5sum | md5sum | cut -d' ' -f1)
 
+# Verificar si la tabla de migraciones existe en la base de datos
+TABLE_EXISTS=$(php -r "
+    \$host = getenv('DB_HOST') ?: '127.0.0.1';
+    \$port = getenv('DB_PORT') ?: '3306';
+    \$username = getenv('DB_USERNAME') ?: 'root';
+    \$password = getenv('DB_PASSWORD') ?: '';
+    \$database = getenv('DB_DATABASE') ?: 'forge';
+    try {
+        \$pdo = new PDO(\"mysql:host=\$host;port=\$port;dbname=\$database\", \$username, \$password);
+        \$result = \$pdo->query(\"SHOW TABLES LIKE 'migrations'\");
+        if (\$result && \$result->rowCount() > 0) {
+            echo 'yes';
+        }
+    } catch (Exception \$e) {}
+")
+
+if [ "$TABLE_EXISTS" != "yes" ]; then
+    echo "[start] La tabla de migraciones no existe. Borrando lock para forzar migración..."
+    rm -f "$LOCK_FILE"
+fi
+
 if [ ! -f "$LOCK_FILE" ] || [ "$(cat $LOCK_FILE)" != "$CURRENT_HASH" ]; then
-    echo "[start] Cambios detectados en migraciones, ejecutando..."
+    echo "[start] Cambios detectados en migraciones o base de datos vacía, ejecutando..."
     php artisan migrate --force
     echo "$CURRENT_HASH" > "$LOCK_FILE"
     echo "[start] Lock actualizado: $CURRENT_HASH"
@@ -93,6 +114,25 @@ if [ "$CENTRAL_ADMIN_COUNT" = "0" ] || [ -z "$CENTRAL_ADMIN_COUNT" ]; then
 else
     echo "[start] Ya existen usuarios centrales ($CENTRAL_ADMIN_COUNT), saltando seeder."
 fi
+
+# ── 5.2 ASEGURAR TENANT EN PRODUCCIÓN ──────────────────────────────────────────
+echo "[start] Asegurando existencia del tenant de producción (gym1)..."
+php artisan tinker --execute="
+if (!\App\Models\Tenant::where('id', 'gym1')->exists()) {
+    \$tenant = \App\Models\Tenant::create([
+        'id' => 'gym1',
+        'name' => 'Gym Demo',
+        'owner_email' => 'admin@gymdemo.com'
+    ]);
+    \$tenant->domains()->create([
+        'domain' => 'deploys-gymapp.juidi9.easypanel.host'
+    ]);
+    \$appHost = parse_url(env('APP_URL', ''), PHP_URL_HOST);
+    if (\$appHost && !in_array(\$appHost, ['localhost', '127.0.0.1', 'gym.test', 'admin.gym.test', 'deploys-gymapp.juidi9.easypanel.host'])) {
+        \$tenant->domains()->create(['domain' => \$appHost]);
+    }
+}
+"
 
 # ── 5.3 STORAGE LINK ─────────────────────────────────────────────────────────
 echo "[start] Creando storage link..."
