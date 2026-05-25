@@ -49,6 +49,24 @@ while [ $attempt -le $max_attempts ]; do
     attempt=$((attempt + 1))
 done
 
+# ── 4.6 CREAR BASE DE DATOS SI NO EXISTE ───────────────────────────────────────
+echo "[start] Asegurando existencia de la base de datos..."
+php -r "
+    \$host = getenv('DB_HOST') ?: '127.0.0.1';
+    \$port = getenv('DB_PORT') ?: '3306';
+    \$username = getenv('DB_USERNAME') ?: 'root';
+    \$password = getenv('DB_PASSWORD') ?: '';
+    \$database = getenv('DB_DATABASE') ?: 'forge';
+    try {
+        \$pdo = new PDO(\"mysql:host=\$host;port=\$port\", \$username, \$password);
+        \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        \$pdo->exec(\"CREATE DATABASE IF NOT EXISTS \`\$database\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\");
+        echo \"[start] Base de datos '\$database' asegurada (creada o ya existente).\n\";
+    } catch (PDOException \$e) {
+        echo \"[start] Advertencia: No se pudo verificar/crear la base de datos '\$database'. Error: \" . \$e->getMessage() . \"\n\";
+    }
+"
+
 # ── 5. MIGRACIONES ────────────────────────────────────────────────────────────
 echo "[start] Corriendo migraciones..."
 
