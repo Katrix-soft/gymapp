@@ -102,6 +102,40 @@ class DatabaseSeeder extends Seeder
                 'status' => 'active',
             ]);
         }
+
+        // 4. Create Production Tenant (gym1) with deploys-gymapp.juidi9.easypanel.host
+        if (!Tenant::where('id', 'gym1')->exists()) {
+            $tenant = Tenant::create([
+                'id' => 'gym1',
+                'name' => 'Gym Demo',
+                'owner_email' => 'admin@gymdemo.com',
+            ]);
+
+            // Create Domain for gym1
+            $tenant->domains()->create([
+                'domain' => 'deploys-gymapp.juidi9.easypanel.host',
+            ]);
+
+            // Also register the APP_URL host if it's different and not local
+            $appHost = parse_url(env('APP_URL', ''), PHP_URL_HOST);
+            if ($appHost && !in_array($appHost, ['localhost', '127.0.0.1', 'gym.test', 'admin.gym.test', 'deploys-gymapp.juidi9.easypanel.host'])) {
+                $tenant->domains()->create([
+                    'domain' => $appHost,
+                ]);
+            }
+
+            // Create SaaS Subscription
+            $proPlan = SaasPlan::where('name', 'Pro')->first();
+            if ($proPlan) {
+                SaasSubscription::create([
+                    'tenant_id' => 'gym1',
+                    'saas_plan_id' => $proPlan->id,
+                    'start_date' => now()->toDateString(),
+                    'end_date' => now()->addYear()->toDateString(),
+                    'status' => 'active',
+                ]);
+            }
+        }
     }
 
     /**
