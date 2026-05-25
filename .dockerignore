@@ -1,0 +1,16 @@
+.git
+.gitignore
+.env
+.env.backup
+.phpunit.result.cache
+node_modules
+vendor
+public/storage
+public/build
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+README.md
+Dockerfile
+docker-compose.yml
