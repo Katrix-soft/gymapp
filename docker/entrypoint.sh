@@ -26,6 +26,29 @@ php artisan route:clear
 php artisan view:cache
 php artisan event:cache
 
+# ── 4.5 ESPERAR A LA BASE DE DATOS ─────────────────────────────────────────────
+echo "[start] Esperando a que la base de datos esté lista en ${DB_HOST:-127.0.0.1}:${DB_PORT:-3306}..."
+max_attempts=15
+attempt=1
+while [ $attempt -le $max_attempts ]; do
+    if php -r "
+        \$host = getenv('DB_HOST') ?: '127.0.0.1';
+        \$port = getenv('DB_PORT') ?: '3306';
+        \$connection = @fsockopen(\$host, (int) \$port, \$errno, \$errstr, 2);
+        if (is_resource(\$connection)) {
+            fclose(\$connection);
+            exit(0);
+        }
+        exit(1);
+    "; then
+        echo "[start] ¡Base de datos conectada con éxito!"
+        break
+    fi
+    echo "[start] Base de datos no responde (intento $attempt/$max_attempts), esperando 2s..."
+    sleep 2
+    attempt=$((attempt + 1))
+done
+
 # ── 5. MIGRACIONES ────────────────────────────────────────────────────────────
 echo "[start] Corriendo migraciones..."
 
