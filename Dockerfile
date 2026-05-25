@@ -15,7 +15,6 @@ WORKDIR /var/www/html
 # Install system dependencies & PHP extensions
 RUN apk add --no-cache \
     nginx \
-    supervisor \
     curl \
     libpng-dev \
     libxml2-dev \
@@ -45,12 +44,10 @@ COPY --from=assets-builder /app/public/build ./public/build
 
 # Setup configuration files
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh && \
-    chown -R www-data:www-data /var/www/html && \
-    mkdir -p /var/log/supervisor
+    chown -R www-data:www-data /var/www/html
 
 # Expose HTTP port
 EXPOSE 80
