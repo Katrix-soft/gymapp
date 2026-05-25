@@ -44,6 +44,7 @@ COPY --from=assets-builder /app/public/build ./public/build
 
 # Setup configuration files
 COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh && \
