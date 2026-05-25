@@ -60,10 +60,10 @@ php -r "
     try {
         \$pdo = new PDO(\"mysql:host=\$host;port=\$port\", \$username, \$password);
         \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        \$pdo->exec(\"CREATE DATABASE IF NOT EXISTS \`\$database\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\");
-        echo \"[start] Base de datos '\$database' asegurada (creada o ya existente).\n\";
+        \$pdo->exec(\"CREATE DATABASE IF NOT EXISTS \\\`\$database\\\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\");
+        echo \"[start] Base de datos '\$database' asegurada.\n\";
     } catch (PDOException \$e) {
-        echo \"[start] Advertencia: No se pudo verificar/crear la base de datos '\$database'. Error: \" . \$e->getMessage() . \"\n\";
+        echo \"[start] Advertencia: \" . \$e->getMessage() . \"\n\";
     }
 "
 
@@ -97,42 +97,95 @@ fi
 if [ ! -f "$LOCK_FILE" ] || [ "$(cat $LOCK_FILE)" != "$CURRENT_HASH" ]; then
     echo "[start] Cambios detectados en migraciones o base de datos vacía, ejecutando..."
     php artisan migrate --force
+    # Also run tenant migrations in the same DB (single shared database)
+    echo "[start] Corriendo migraciones de tablas tenant en la misma DB..."
+    php artisan migrate --path=database/migrations/tenant --force
     echo "$CURRENT_HASH" > "$LOCK_FILE"
     echo "[start] Lock actualizado: $CURRENT_HASH"
 else
     echo "[start] Sin cambios en migraciones, saltando."
 fi
 
-# ── 5.1 SEEDER CENTRAL ────────────────────────────────────────────────────────
+# ── 5.1 SEEDER CENTRAL (solo SaaS Plans + CentralUser, SIN crear tenants) ─────
 echo "[start] Verificando base central..."
 CENTRAL_ADMIN_COUNT=$(php artisan tinker --execute="echo App\Models\CentralUser::count();" 2>/dev/null | tail -1)
 
 if [ "$CENTRAL_ADMIN_COUNT" = "0" ] || [ -z "$CENTRAL_ADMIN_COUNT" ]; then
-    echo "[start] No hay usuarios centrales, corriendo DatabaseSeeder..."
-    php artisan db:seed --force
-    echo "[start] DatabaseSeeder completado."
+    echo "[start] No hay usuarios centrales, corriendo seeders centrales..."
+    php artisan tinker --execute="
+        \$seeder = new \Database\Seeders\DatabaseSeeder();
+        \$seeder->run();
+    " 2>/dev/null || true
+    echo "[start] Seeders centrales completados."
 else
     echo "[start] Ya existen usuarios centrales ($CENTRAL_ADMIN_COUNT), saltando seeder."
 fi
 
-# ── 5.2 ASEGURAR TENANT EN PRODUCCIÓN ──────────────────────────────────────────
+# ── 5.2 ASEGURAR TENANT EN PRODUCCIÓN (via SQL directo, sin eventos) ───────────
 echo "[start] Asegurando existencia del tenant de producción (gym1)..."
-php artisan tinker --execute="
-if (!\App\Models\Tenant::where('id', 'gym1')->exists()) {
-    \$tenant = \App\Models\Tenant::create([
-        'id' => 'gym1',
-        'name' => 'Gym Demo',
-        'owner_email' => 'admin@gymdemo.com'
-    ]);
-    \$tenant->domains()->create([
-        'domain' => 'deploys-gymapp.juidi9.easypanel.host'
-    ]);
-    \$appHost = parse_url(env('APP_URL', ''), PHP_URL_HOST);
-    if (\$appHost && !in_array(\$appHost, ['localhost', '127.0.0.1', 'gym.test', 'admin.gym.test', 'deploys-gymapp.juidi9.easypanel.host'])) {
-        \$tenant->domains()->create(['domain' => \$appHost]);
+php -r "
+    \$host = getenv('DB_HOST') ?: '127.0.0.1';
+    \$port = getenv('DB_PORT') ?: '3306';
+    \$username = getenv('DB_USERNAME') ?: 'root';
+    \$password = getenv('DB_PASSWORD') ?: '';
+    \$database = getenv('DB_DATABASE') ?: 'forge';
+    try {
+        \$pdo = new PDO(\"mysql:host=\$host;port=\$port;dbname=\$database\", \$username, \$password);
+        \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Verificar si el tenant gym1 ya existe
+        \$stmt = \$pdo->prepare('SELECT COUNT(*) FROM tenants WHERE id = ?');
+        \$stmt->execute(['gym1']);
+        \$exists = (int) \$stmt->fetchColumn();
+
+        if (\$exists === 0) {
+            echo \"[start] Creando tenant gym1 via SQL directo...\n\";
+            \$now = date('Y-m-d H:i:s');
+            \$data = json_encode(['name' => 'Gym Demo', 'owner_email' => 'admin@gymdemo.com']);
+
+            \$stmt = \$pdo->prepare('INSERT INTO tenants (id, data, created_at, updated_at) VALUES (?, ?, ?, ?)');
+            \$stmt->execute(['gym1', \$data, \$now, \$now]);
+
+            \$stmt = \$pdo->prepare('INSERT INTO domains (domain, tenant_id, created_at, updated_at) VALUES (?, ?, ?, ?)');
+            \$stmt->execute(['deploys-gymapp.juidi9.easypanel.host', 'gym1', \$now, \$now]);
+
+            echo \"[start] Tenant gym1 + dominio creados exitosamente.\n\";
+        } else {
+            // Verificar que el dominio existe
+            \$stmt = \$pdo->prepare(\"SELECT COUNT(*) FROM domains WHERE tenant_id = 'gym1' AND domain = ?\");
+            \$stmt->execute(['deploys-gymapp.juidi9.easypanel.host']);
+            \$domainExists = (int) \$stmt->fetchColumn();
+            if (\$domainExists === 0) {
+                \$now = date('Y-m-d H:i:s');
+                \$stmt = \$pdo->prepare('INSERT INTO domains (domain, tenant_id, created_at, updated_at) VALUES (?, ?, ?, ?)');
+                \$stmt->execute(['deploys-gymapp.juidi9.easypanel.host', 'gym1', \$now, \$now]);
+                echo \"[start] Dominio de producción agregado al tenant gym1.\n\";
+            } else {
+                echo \"[start] Tenant gym1 y dominio ya existen.\n\";
+            }
+        }
+    } catch (PDOException \$e) {
+        echo \"[start] Error configurando tenant: \" . \$e->getMessage() . \"\n\";
     }
-}
 "
+
+# ── 5.2.1 SEED TENANT DATA ────────────────────────────────────────────────────
+echo "[start] Verificando seed del tenant gym1..."
+php artisan tinker --execute="
+    \$tenant = \App\Models\Tenant::find('gym1');
+    if (\$tenant) {
+        tenancy()->initialize(\$tenant);
+        if (\App\Models\User::count() === 0) {
+            echo 'Seeding tenant gym1...';
+            \$seeder = new \Database\Seeders\DatabaseSeeder();
+            \$seeder->run();
+            echo 'Done.';
+        } else {
+            echo 'Tenant gym1 ya tiene datos.';
+        }
+        tenancy()->end();
+    }
+" 2>/dev/null || true
 
 # ── 5.3 STORAGE LINK ─────────────────────────────────────────────────────────
 echo "[start] Creando storage link..."

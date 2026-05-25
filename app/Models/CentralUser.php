@@ -9,7 +9,7 @@ class CentralUser extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'users';
+    protected $table = 'central_users';
 
     protected $fillable = [
         'name',
