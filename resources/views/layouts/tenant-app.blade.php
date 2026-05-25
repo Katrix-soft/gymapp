@@ -24,7 +24,15 @@
             }
         </style>
 
+        <!-- PWA Settings -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="Arkhon Gym">
+        <link rel="apple-touch-icon" href="/icon-192.png">
+        <link rel="manifest" href="/manifest.json">
+
         <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="antialiased min-h-screen text-zinc-100 selection:bg-orange-500 selection:text-white">
@@ -51,9 +59,9 @@
                     </div>
 
                     <!-- Header Page Title / Breadcrumbs (Desktop) -->
-                    <div class="flex-1 hidden lg:flex items-center space-x-2">
+                    <div class="flex-1 hidden lg:flex items-center">
                         @if (isset($header))
-                            <div class="text-lg font-semibold tracking-tight text-zinc-200">
+                            <div class="w-full text-zinc-200">
                                 {{ $header }}
                             </div>
                         @endif
@@ -212,14 +220,14 @@
                                     <span>Entrenar Ahora</span>
                                 </a>
 
-                                <a href="{{ $segment1 }}/member/classes" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/member/classes*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
+                                <a href="{{ $segment1 }}/member/bookings" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/member/bookings*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     <span>Reservar Clases</span>
                                 </a>
 
-                                <a href="{{ $segment1 }}/member/payments" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/member/payments*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
+                                <a href="{{ $segment1 }}/member/checkout-simulation" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/member/checkout-simulation*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                                    <span>Mis Facturas / Pagos</span>
+                                    <span>Membresía / Pagos</span>
                                 </a>
 
                                 <a href="{{ $segment1 }}/member/chat" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/member/chat*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
@@ -252,5 +260,15 @@
             </div>
         </div>
         
+        <!-- Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(reg => console.log('Service Worker registered!', reg))
+                        .catch(err => console.log('Service Worker registration failed: ', err));
+                });
+            }
+        </script>
     </body>
 </html>

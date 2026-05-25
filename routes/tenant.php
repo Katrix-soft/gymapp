@@ -64,6 +64,7 @@ Route::middleware(['auth', 'role:member'])->prefix('member')->name('gym.member.'
     Route::get('/bookings', \App\Livewire\Gym\Member\Bookings::class)->name('bookings');
     Route::get('/workout', \App\Livewire\Gym\Member\Workout::class)->name('workout');
     Route::get('/checkout-simulation', \App\Livewire\Gym\Member\CheckoutSimulation::class)->name('checkout.simulation');
+    Route::get('/chat', \App\Livewire\Gym\Member\Chat::class)->name('chat');
 
     // Payments routes
     Route::get('/payment/success', function() {

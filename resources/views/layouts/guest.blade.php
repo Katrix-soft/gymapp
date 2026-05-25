@@ -15,6 +15,13 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+        <!-- PWA Settings -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="Arkhon Gym">
+        <link rel="apple-touch-icon" href="/icon-192.png">
+        <link rel="manifest" href="/manifest.json">
+
         @php
             $brandColor = tenant() ? \App\Models\TenantConfig::get('brand_color', '#FF6B35') : '#FF6B35';
             $logoUrl = tenant() ? \App\Models\TenantConfig::get('logo_url') : null;
@@ -100,5 +107,15 @@
                 {{ $slot }}
             </div>
         </div>
+        <!-- Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(reg => console.log('Service Worker registered!', reg))
+                        .catch(err => console.log('Service Worker registration failed: ', err));
+                });
+            }
+        </script>
     </body>
 </html>
