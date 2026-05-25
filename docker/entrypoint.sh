@@ -22,7 +22,7 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # ── 4. CACHÉ DE LARAVEL ───────────────────────────────────────────────────────
 php artisan config:clear
 php artisan config:cache
-php artisan route:cache
+php artisan route:clear
 php artisan view:cache
 php artisan event:cache
 
