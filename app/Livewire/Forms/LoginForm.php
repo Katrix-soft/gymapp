@@ -4,6 +4,7 @@ namespace App\Livewire\Forms;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -12,10 +13,10 @@ use Livewire\Form;
 
 class LoginForm extends Form
 {
-    #[Validate('required|string|email')]
+    #[Validate('required|string|email|max:255')]
     public string $email = '';
 
-    #[Validate('required|string')]
+    #[Validate('required|string|min:6|max:128')]
     public string $password = '';
 
     #[Validate('boolean')]
@@ -33,8 +34,16 @@ class LoginForm extends Form
         if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
             RateLimiter::hit($this->throttleKey(), 900); // 15 minutes lockout
 
+            // Log failed attempt for security monitoring
+            Log::warning('Intento de login fallido', [
+                'email' => $this->email,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'tenant' => tenant('id') ?? 'central',
+            ]);
+
             throw ValidationException::withMessages([
-                'form.email' => trans('auth.failed'),
+                'form.email' => 'Las credenciales no coinciden con nuestros registros.',
             ]);
         }
 
@@ -53,12 +62,17 @@ class LoginForm extends Form
         event(new Lockout(request()));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
+        $minutes = ceil($seconds / 60);
+
+        Log::warning('Login bloqueado por rate limiting', [
+            'email' => $this->email,
+            'ip' => request()->ip(),
+            'seconds_remaining' => $seconds,
+            'tenant' => tenant('id') ?? 'central',
+        ]);
 
         throw ValidationException::withMessages([
-            'form.email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'form.email' => "Demasiados intentos. Espera {$minutes} minuto(s) antes de reintentar.",
         ]);
     }
 
