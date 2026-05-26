@@ -19,6 +19,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('tenant.index');
 
+Route::post('/webhook/mercadopago', [\App\Http\Controllers\PaymentController::class, 'webhook'])->name('webhook.mercadopago');
+
 // Shared Dashboard Router: inspects roles and redirects
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -103,21 +105,7 @@ Route::middleware(['auth', 'role:member'])->prefix('member')->name('gym.member.'
     Route::get('/chat', \App\Livewire\Gym\Member\Chat::class)->name('chat');
 
     // Payments routes
-    Route::get('/payment/success', function() {
-        session()->flash('message', '¡Membresía activada exitosamente!');
-        $prefix = request()->segment(1) === 'g' ? '/g/' . tenant('id') : '';
-        return redirect($prefix . '/member/dashboard');
-    })->name('payment.success');
-
-    Route::get('/payment/pending', function() {
-        session()->flash('message', 'Tu pago está pendiente de aprobación.');
-        $prefix = request()->segment(1) === 'g' ? '/g/' . tenant('id') : '';
-        return redirect($prefix . '/member/dashboard');
-    })->name('payment.pending');
-
-    Route::get('/payment/failure', function() {
-        session()->flash('error', 'El pago fue rechazado. Intenta de nuevo.');
-        $prefix = request()->segment(1) === 'g' ? '/g/' . tenant('id') : '';
-        return redirect($prefix . '/member/dashboard');
-    })->name('payment.failure');
+    Route::get('/payment/success', [\App\Http\Controllers\PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/pending', [\App\Http\Controllers\PaymentController::class, 'pending'])->name('payment.pending');
+    Route::get('/payment/failure', [\App\Http\Controllers\PaymentController::class, 'failure'])->name('payment.failure');
 });

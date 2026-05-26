@@ -36,7 +36,7 @@
                 </svg>
                 Declinar Pago
             </button>
-            <button wire:click="processSimulation('pending')" class="btn w-full bg-zinc-800 hover:bg-zinc-755 border border-zinc-700 text-zinc-300 font-semibold rounded-xl">
+            <button wire:click="processSimulation('pending')" class="btn w-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 font-semibold rounded-xl">
                 Simular Pago Pendiente
             </button>
         </div>
@@ -50,7 +50,7 @@
                 </svg>
             </div>
             <h2 class="text-2xl font-black text-white">¡Pago Aprobado!</h2>
-            <p class="text-xs text-zinc-450 max-w-xs mx-auto mt-2">La simulación se ha procesado exitosamente. Tu membresía ha sido extendida y activada.</p>
+            <p class="text-xs text-zinc-400 max-w-xs mx-auto mt-2">La simulación se ha procesado exitosamente. Tu membresía ha sido extendida y activada.</p>
             
             <button wire:click="goBack" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl mt-8 px-8 shadow-lg shadow-orange-500/10">
                 Volver a mi Portal
@@ -60,13 +60,13 @@
 
     @if($simulationStatus === 'failure')
         <div class="text-center py-6">
-            <div class="w-16 h-16 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-450 flex items-center justify-center mx-auto mb-4">
+            <div class="w-16 h-16 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                 </svg>
             </div>
             <h2 class="text-2xl font-black text-white">Pago Rechazado</h2>
-            <p class="text-xs text-zinc-450 max-w-xs mx-auto mt-2">Tu entidad bancaria o tarjeta rechazó la operación. Por favor intenta con otro método.</p>
+            <p class="text-xs text-zinc-400 max-w-xs mx-auto mt-2">Tu entidad bancaria o tarjeta rechazó la operación. Por favor intenta con otro método.</p>
             
             <button wire:click="goBack" class="btn bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700 rounded-xl mt-8 px-8">
                 Volver a mi Portal
@@ -76,13 +76,13 @@
 
     @if($simulationStatus === 'pending')
         <div class="text-center py-6">
-            <div class="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-455 flex items-center justify-center mx-auto mb-4">
+            <div class="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                 </svg>
             </div>
             <h2 class="text-2xl font-black text-white">Pago Pendiente</h2>
-            <p class="text-xs text-zinc-450 max-w-xs mx-auto mt-2">Tu transacción se encuentra bajo revisión o esperando acreditación.</p>
+            <p class="text-xs text-zinc-400 max-w-xs mx-auto mt-2">Tu transacción se encuentra bajo revisión o esperando acreditación.</p>
             
             <button wire:click="goBack" class="btn bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700 rounded-xl mt-8 px-8">
                 Volver a mi Portal

@@ -64,16 +64,70 @@ class Dashboard extends Component
             'external_reference' => 'MP-' . strtoupper(uniqid()),
         ]);
 
-        // 2. Try generating MercadoPago Checkout URL (simulated / real sandbox integration)
         $prefix = request()->segment(1) === 'g' ? '/g/' . tenant('id') : '';
-        $successUrl = route('gym.member.payment.success', ['payment_id' => $payment->id]);
-        $pendingUrl = route('gym.member.payment.pending', ['payment_id' => $payment->id]);
-        $failureUrl = route('gym.member.payment.failure', ['payment_id' => $payment->id]);
 
-        // We provide a fully interactive mock payment page to simulate checkout success/failure
+        // 2. Generate real MercadoPago Preference if configured
+        $accessToken = config('services.mercadopago.access_token');
+        $clientId = config('services.mercadopago.client_id');
+        $clientSecret = config('services.mercadopago.client_secret');
+
+        if (!empty($accessToken) || (!empty($clientId) && !empty($clientSecret))) {
+            try {
+                if (!empty($accessToken)) {
+                    \MercadoPago\SDK::setAccessToken($accessToken);
+                } else {
+                    \MercadoPago\SDK::setClientId($clientId);
+                    \MercadoPago\SDK::setClientSecret($clientSecret);
+                }
+
+                $preference = new \MercadoPago\Preference();
+
+                // Item
+                $item = new \MercadoPago\Item();
+                $item->title = "Membresía " . $plan->name . " - " . (tenant('name') ?: 'GymApp');
+                $item->quantity = 1;
+                $item->unit_price = (float)$plan->price;
+                $item->currency_id = "ARS";
+                $preference->items = [$item];
+
+                // Payer
+                $payer = new \MercadoPago\Payer();
+                $payer->email = $user->email;
+                $payer->name = $user->name;
+                $preference->payer = $payer;
+
+                // Return URLs
+                $successUrl = url($prefix . '/member/payment/success') . "?payment_id=" . $payment->id;
+                $failureUrl = url($prefix . '/member/payment/failure') . "?payment_id=" . $payment->id;
+                $pendingUrl = url($prefix . '/member/payment/pending') . "?payment_id=" . $payment->id;
+
+                $preference->back_urls = [
+                    "success" => $successUrl,
+                    "failure" => $failureUrl,
+                    "pending" => $pendingUrl,
+                ];
+
+                $preference->auto_return = "approved";
+                $preference->external_reference = (string)$payment->id;
+
+                // Webhook Notification URL
+                $preference->notification_url = url($prefix . '/webhook/mercadopago');
+
+                $preference->save();
+
+                $checkoutUrl = (config('app.env') === 'production') ? $preference->init_point : $preference->sandbox_init_point;
+
+                if (!empty($checkoutUrl)) {
+                    $payment->update(['external_reference' => 'PREF-' . $preference->id]);
+                    return redirect($checkoutUrl);
+                }
+            } catch (\Exception $e) {
+                logger()->error('Error al generar preferencia de MercadoPago: ' . $e->getMessage());
+            }
+        }
+
+        // Fallback to simulated payment screen if not configured or failed
         $this->checkoutUrl = $prefix . "/member/checkout-simulation?payment_id={$payment->id}&plan_id={$plan->id}";
-
-        // Redirect directly to checkout
         return redirect($this->checkoutUrl);
     }
 
