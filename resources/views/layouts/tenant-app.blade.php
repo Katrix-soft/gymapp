@@ -113,7 +113,7 @@
                 <!-- Footer -->
                 <footer class="footer footer-center p-4 bg-zinc-950 text-zinc-500 text-xs border-t border-zinc-900/60">
                     <aside>
-                        <p>© {{ date('Y') }} {{ tenant('name') ?? 'Arkhon Gym' }}. Todos los derechos reservados. Powered by Arkhon SaaS.</p>
+                        <p>© {{ date('Y') }} {{ tenant('name') ?? 'Arkhon Gym' }}. Todos los derechos reservados. Powered by <a href="http://katrix.com.ar">katrix</a>.</p>
                     </aside>
                 </footer>
             </div>
@@ -187,6 +187,28 @@
                                 <a href="{{ $segment1 }}/admin/chat" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/admin/chat*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                                     <span>Mensajería / Chat</span>
+                                </a>
+
+                                <div class="h-px bg-zinc-800/60 my-2 mx-4"></div>
+
+                                <a href="{{ $segment1 }}/admin/scanner" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/admin/scanner*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>
+                                    <span>Escáner QR Recepción</span>
+                                </a>
+
+                                <a href="{{ $segment1 }}/admin/kiosk" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/admin/kiosk*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 009 11a13.917 13.917 0 00-2.3-7.551m3.854 8.046a12.09 12.09 0 011.07 1.05m-3.97-1.05a12.47 12.47 0 00-1.123-8.32m2.91 8.32a12.422 12.422 0 01-1.082 5.53m1.538-12.2a12.093 12.093 0 01-1.08 1.058m1.586-.072A12.09 12.09 0 0115 11c0 3.06 1.007 5.885 2.71 8.12M9 11V9m15-1a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>Kiosco Biométrico</span>
+                                </a>
+
+                                <a href="{{ $segment1 }}/admin/webhooks" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/admin/webhooks*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                                    <span>Auditoría Webhooks</span>
+                                </a>
+
+                                <a href="{{ $segment1 }}/admin/settings" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('*/admin/settings*') ? 'bg-orange-500 text-white font-semibold shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><circle cx="12" cy="12" r="3" /></svg>
+                                    <span>Configuración</span>
                                 </a>
                             @elseif($role === 'trainer')
                                 <!-- Trainer Links -->

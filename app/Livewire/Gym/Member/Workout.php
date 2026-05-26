@@ -109,7 +109,7 @@ class Workout extends Component
                     WorkoutSetLog::create([
                         'workout_log_id' => $log->id,
                         'exercise_id' => $exId,
-                        'sets_index' => $setIndex + 1,
+                        'set_number' => $setIndex + 1,
                         'reps' => (int) $setData['reps'],
                         'weight' => (float) $setData['weight'],
                     ]);

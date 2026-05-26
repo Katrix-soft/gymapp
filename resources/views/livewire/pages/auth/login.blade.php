@@ -107,19 +107,19 @@ new #[Layout('layouts.guest')] class extends Component
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
-                    Correo electrónico
+                    Correo electrónico / Usuario
                 </span>
             </label>
             <div class="relative">
                 <input
                     wire:model="form.email"
                     id="email"
-                    type="email"
+                    type="text"
                     name="email"
                     required
                     autofocus
                     autocomplete="username"
-                    placeholder="tu@email.com"
+                    placeholder="tu@email.com o usuario"
                     class="w-full bg-gray-900/50 border border-gray-700/60 text-gray-100 rounded-xl pl-4 pr-10 py-3 shadow-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-950 brand-focus transition-all duration-200"
                 />
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">

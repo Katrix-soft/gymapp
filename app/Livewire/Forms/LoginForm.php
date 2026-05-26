@@ -13,7 +13,7 @@ use Livewire\Form;
 
 class LoginForm extends Form
 {
-    #[Validate('required|string|email|max:255')]
+    #[Validate('required|string|max:255')]
     public string $email = '';
 
     #[Validate('required|string|min:6|max:128')]
@@ -31,12 +31,37 @@ class LoginForm extends Form
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+        $loginValue = trim($this->email);
+        $resolvedEmail = $loginValue;
+
+        if (!str_contains($loginValue, '@')) {
+            // Check if it's a tenant or central user
+            if (tenant()) {
+                // Try matching gym_code first
+                $resolvedUser = \App\Models\User::where('gym_code', $loginValue)->first();
+                // If not found, try matching prefix of the email (email LIKE 'username@%')
+                if (!$resolvedUser) {
+                    $resolvedUser = \App\Models\User::where('email', 'like', $loginValue . '@%')->first();
+                }
+                if ($resolvedUser) {
+                    $resolvedEmail = $resolvedUser->email;
+                }
+            } else {
+                // Central context login
+                $resolvedUser = \App\Models\CentralUser::where('email', 'like', $loginValue . '@%')->first();
+                if ($resolvedUser) {
+                    $resolvedEmail = $resolvedUser->email;
+                }
+            }
+        }
+
+        if (! Auth::attempt(['email' => $resolvedEmail, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey(), 900); // 15 minutes lockout
 
             // Log failed attempt for security monitoring
             Log::warning('Intento de login fallido', [
                 'email' => $this->email,
+                'resolved_email' => $resolvedEmail,
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'tenant' => tenant('id') ?? 'central',

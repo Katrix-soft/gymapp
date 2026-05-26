@@ -46,14 +46,14 @@ new class extends Component
 
 <section class="space-y-6" x-data="biometricLinking()">
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
+        <h2 class="text-lg font-medium text-gray-900 flex items-center gap-2">
             <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 009 11a13.917 13.917 0 00-2.3-7.551m3.854 8.046a12.09 12.09 0 011.07 1.05m-3.97-1.05a12.47 12.47 0 00-1.123-8.32m2.91 8.32a12.422 12.422 0 01-1.082 5.53m1.538-12.2a12.093 12.093 0 01-1.08 1.058m1.586-.072A12.09 12.09 0 0115 11c0 3.06 1.007 5.885 2.71 8.12M9 11V9m15-1a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             Acceso Biométrico (Touch ID / Face ID)
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        <p class="mt-1 text-sm text-gray-600 ">
             Vincula el sensor de huella digital, Face ID o Windows Hello de este dispositivo para iniciar sesión rápidamente sin ingresar tu contraseña.
         </p>
     </header>

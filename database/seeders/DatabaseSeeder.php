@@ -103,38 +103,44 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 4. Create Production Tenant (gym1) with deploys-gymapp.juidi9.easypanel.host
-        if (!Tenant::where('id', 'gym1')->exists()) {
+        // 4. Create Production Tenant (gym1)
+        $tenant = Tenant::where('id', 'gym1')->first();
+        if (!$tenant) {
             $tenant = Tenant::create([
                 'id' => 'gym1',
                 'name' => 'Gym Demo',
                 'owner_email' => 'admin@gymdemo.com',
             ]);
+        }
 
-            // Create Domain for gym1
-            $tenant->domains()->create([
-                'domain' => 'deploys-gymapp.juidi9.easypanel.host',
-            ]);
+        // Ensure domains exist
+        $requiredDomains = ['deploys-gymapp.juidi9.easypanel.host', 'gymapp.katrix.com.ar'];
+        foreach ($requiredDomains as $domain) {
+            if (!$tenant->domains()->where('domain', $domain)->exists()) {
+                $tenant->domains()->create(['domain' => $domain]);
+            }
+        }
 
-            // Also register the APP_URL host if it's different and not local
-            $appHost = parse_url(env('APP_URL', ''), PHP_URL_HOST);
-            if ($appHost && !in_array($appHost, ['localhost', '127.0.0.1', 'gym.test', 'admin.gym.test', 'deploys-gymapp.juidi9.easypanel.host'])) {
+        // Also register the APP_URL host if it's different and not local
+        $appHost = parse_url(env('APP_URL', ''), PHP_URL_HOST);
+        if ($appHost && !in_array($appHost, array_merge(['localhost', '127.0.0.1', 'gym.test', 'admin.gym.test'], $requiredDomains))) {
+            if (!$tenant->domains()->where('domain', $appHost)->exists()) {
                 $tenant->domains()->create([
                     'domain' => $appHost,
                 ]);
             }
+        }
 
-            // Create SaaS Subscription
-            $proPlan = SaasPlan::where('name', 'Pro')->first();
-            if ($proPlan) {
-                SaasSubscription::create([
-                    'tenant_id' => 'gym1',
-                    'saas_plan_id' => $proPlan->id,
-                    'start_date' => now()->toDateString(),
-                    'end_date' => now()->addYear()->toDateString(),
-                    'status' => 'active',
-                ]);
-            }
+        // Create SaaS Subscription
+        $proPlan = SaasPlan::where('name', 'Pro')->first();
+        if ($proPlan && !SaasSubscription::where('tenant_id', 'gym1')->exists()) {
+            SaasSubscription::create([
+                'tenant_id' => 'gym1',
+                'saas_plan_id' => $proPlan->id,
+                'start_date' => now()->toDateString(),
+                'end_date' => now()->addYear()->toDateString(),
+                'status' => 'active',
+            ]);
         }
     }
 

@@ -52,7 +52,6 @@ Route::get('/profile', function () {
 Route::get('/manifest.json', function () {
     $gymName = \App\Models\TenantConfig::get('gym_name', 'SaaS Gym');
     $brandColor = \App\Models\TenantConfig::get('brand_color', '#f97316');
-    $logoUrl = \App\Models\TenantConfig::get('logo_url') ?: '/icon-192.png';
     $prefix = request()->segment(1) === 'g' ? '/g/' . tenant('id') : '';
 
     return response()->json([
@@ -66,18 +65,20 @@ Route::get('/manifest.json', function () {
         'orientation' => 'portrait',
         'icons' => [
             [
-                'src' => $logoUrl,
+                'src' => '/icon-192.png',
                 'sizes' => '192x192',
                 'type' => 'image/png',
                 'purpose' => 'any maskable'
             ],
             [
-                'src' => $logoUrl,
+                'src' => '/icon-512.png',
                 'sizes' => '512x512',
                 'type' => 'image/png',
                 'purpose' => 'any maskable'
             ]
         ]
+    ], 200, [
+        'Content-Type' => 'application/manifest+json'
     ]);
 });
 
@@ -89,11 +90,19 @@ Route::middleware(['auth', 'role:gym_admin'])->prefix('admin')->name('gym.admin.
     Route::get('/payments', \App\Livewire\Gym\Admin\Payments::class)->name('payments');
     Route::get('/routines', \App\Livewire\Gym\Admin\Routines::class)->name('routines');
     Route::get('/chat', \App\Livewire\Gym\Admin\Chat::class)->name('chat');
+    Route::get('/scanner', \App\Livewire\Gym\Admin\Scanner::class)->name('scanner');
+    Route::get('/kiosk', \App\Livewire\Gym\Admin\Kiosk::class)->name('kiosk');
+    Route::get('/webhooks', \App\Livewire\Gym\Admin\Webhooks::class)->name('webhooks');
+    Route::get('/settings', \App\Livewire\Gym\Admin\Settings::class)->name('settings');
 });
 
 // Trainer Portal
 Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('gym.trainer.')->group(function () {
     Route::get('/dashboard', \App\Livewire\Gym\Trainer\Dashboard::class)->name('dashboard');
+    Route::get('/classes', \App\Livewire\Gym\Trainer\Classes::class)->name('classes');
+    Route::get('/routines', \App\Livewire\Gym\Trainer\Routines::class)->name('routines');
+    Route::get('/members', \App\Livewire\Gym\Trainer\Members::class)->name('members');
+    Route::get('/chat', \App\Livewire\Gym\Trainer\Chat::class)->name('chat');
 });
 
 // Member Portal
@@ -108,4 +117,5 @@ Route::middleware(['auth', 'role:member'])->prefix('member')->name('gym.member.'
     Route::get('/payment/success', [\App\Http\Controllers\PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payment/pending', [\App\Http\Controllers\PaymentController::class, 'pending'])->name('payment.pending');
     Route::get('/payment/failure', [\App\Http\Controllers\PaymentController::class, 'failure'])->name('payment.failure');
+    Route::get('/payment/receipt/{paymentId}', [\App\Http\Controllers\ReceiptController::class, 'download'])->name('payment.receipt');
 });

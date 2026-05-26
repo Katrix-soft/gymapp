@@ -71,49 +71,39 @@ class Dashboard extends Component
         $clientId = config('services.mercadopago.client_id');
         $clientSecret = config('services.mercadopago.client_secret');
 
-        if (!empty($accessToken) || (!empty($clientId) && !empty($clientSecret))) {
+        if (!empty($accessToken)) {
             try {
-                if (!empty($accessToken)) {
-                    \MercadoPago\SDK::setAccessToken($accessToken);
-                } else {
-                    \MercadoPago\SDK::setClientId($clientId);
-                    \MercadoPago\SDK::setClientSecret($clientSecret);
-                }
+                \MercadoPago\MercadoPagoConfig::setAccessToken($accessToken);
 
-                $preference = new \MercadoPago\Preference();
+                $client = new \MercadoPago\Client\Preference\PreferenceClient();
 
-                // Item
-                $item = new \MercadoPago\Item();
-                $item->title = "Membresía " . $plan->name . " - " . (tenant('name') ?: 'GymApp');
-                $item->quantity = 1;
-                $item->unit_price = (float)$plan->price;
-                $item->currency_id = "ARS";
-                $preference->items = [$item];
-
-                // Payer
-                $payer = new \MercadoPago\Payer();
-                $payer->email = $user->email;
-                $payer->name = $user->name;
-                $preference->payer = $payer;
-
-                // Return URLs
                 $successUrl = url($prefix . '/member/payment/success') . "?payment_id=" . $payment->id;
                 $failureUrl = url($prefix . '/member/payment/failure') . "?payment_id=" . $payment->id;
                 $pendingUrl = url($prefix . '/member/payment/pending') . "?payment_id=" . $payment->id;
+                $notificationUrl = url($prefix . '/webhook/mercadopago');
 
-                $preference->back_urls = [
-                    "success" => $successUrl,
-                    "failure" => $failureUrl,
-                    "pending" => $pendingUrl,
-                ];
-
-                $preference->auto_return = "approved";
-                $preference->external_reference = (string)$payment->id;
-
-                // Webhook Notification URL
-                $preference->notification_url = url($prefix . '/webhook/mercadopago');
-
-                $preference->save();
+                $preference = $client->create([
+                    "items" => [
+                        [
+                            "title" => "Membresía " . $plan->name . " - " . (tenant('name') ?: 'GymApp'),
+                            "quantity" => 1,
+                            "unit_price" => (float)$plan->price,
+                            "currency_id" => "ARS"
+                        ]
+                    ],
+                    "payer" => [
+                        "email" => $user->email,
+                        "name" => $user->name,
+                    ],
+                    "back_urls" => [
+                        "success" => $successUrl,
+                        "failure" => $failureUrl,
+                        "pending" => $pendingUrl,
+                    ],
+                    "auto_return" => "approved",
+                    "external_reference" => (string)$payment->id,
+                    "notification_url" => $notificationUrl,
+                ]);
 
                 $checkoutUrl = (config('app.env') === 'production') ? $preference->init_point : $preference->sandbox_init_point;
 
@@ -121,7 +111,7 @@ class Dashboard extends Component
                     $payment->update(['external_reference' => 'PREF-' . $preference->id]);
                     return redirect($checkoutUrl);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 logger()->error('Error al generar preferencia de MercadoPago: ' . $e->getMessage());
             }
         }
@@ -148,9 +138,24 @@ class Dashboard extends Component
             ->orderBy('completed_at', 'desc')
             ->first();
 
+        // Calculate weekly progress
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $workoutsThisWeek = $user->workoutLogs()
+            ->whereBetween('completed_at', [$startOfWeek, $endOfWeek])
+            ->count();
+        $weeklyGoal = 4;
+        $weeklyProgressPercentage = min(100, round(($workoutsThisWeek / $weeklyGoal) * 100));
+
         // Fetch physical measurements
         $measurements = $user->bodyMeasurements()
             ->orderBy('logged_at', 'asc')
+            ->get();
+
+        // Fetch past payments
+        $pastPayments = $user->payments()
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
             ->get();
 
         $plans = Plan::all();
@@ -160,6 +165,10 @@ class Dashboard extends Component
             'activeRoutine' => $activeRoutine,
             'measurements' => $measurements,
             'plans' => $plans,
+            'workoutsThisWeek' => $workoutsThisWeek,
+            'weeklyGoal' => $weeklyGoal,
+            'weeklyProgressPercentage' => $weeklyProgressPercentage,
+            'pastPayments' => $pastPayments,
         ])->layout('layouts.tenant-app');
     }
 }

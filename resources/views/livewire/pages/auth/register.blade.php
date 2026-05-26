@@ -116,7 +116,7 @@ new #[Layout('layouts.guest')] class extends Component
         @if (!tenant())
             <!-- Gym Configuration (Central SaaS only) -->
             <div class="mb-4">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Configura tu Gimnasio</h3>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Configura tu Gimnasio</h3>
                 
                 <div>
                     <x-input-label for="gym_name" :value="__('Nombre del Gimnasio')" />
@@ -128,7 +128,7 @@ new #[Layout('layouts.guest')] class extends Component
                     <x-input-label for="gym_slug" :value="__('Subdominio del Gimnasio')" />
                     <div class="flex items-center mt-1">
                         <x-text-input wire:model="gym_slug" id="gym_slug" class="block w-full rounded-r-none" type="text" name="gym_slug" placeholder="mi-gimnasio" required />
-                        <span class="bg-gray-100 dark:bg-gray-800 text-gray-500 border border-l-0 border-gray-300 dark:border-gray-700 px-3 py-2 rounded-r-md text-sm">
+                        <span class="bg-gray-100 text-gray-500 border border-l-0 border-gray-300 px-3 py-2 rounded-r-md text-sm">
                             .gym.test
                         </span>
                     </div>
@@ -136,8 +136,8 @@ new #[Layout('layouts.guest')] class extends Component
                 </div>
             </div>
 
-            <hr class="my-6 border-gray-300 dark:border-gray-700" />
-            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Cuenta del Administrador</h3>
+            <hr class="my-6 border-gray-300 " />
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Cuenta del Administrador</h3>
         @endif
 
         <!-- First Name -->
@@ -181,7 +181,7 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}" wire:navigate>
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " href="{{ route('login') }}" wire:navigate>
                 {{ __('¿Ya estás registrado?') }}
             </a>
 

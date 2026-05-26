@@ -38,5 +38,7 @@ Route::get('/manifest.json', function () {
                 'purpose' => 'any maskable'
             ]
         ]
+    ], 200, [
+        'Content-Type' => 'application/manifest+json'
     ]);
 });
