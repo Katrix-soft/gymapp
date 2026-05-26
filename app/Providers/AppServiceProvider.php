@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production (behind Easypanel/nginx reverse proxy)
+        if (app()->environment('production') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
         // Automatically inject tenant parameter into URL generation when tenancy is active
         \Illuminate\Support\Facades\Event::listen(
             \Stancl\Tenancy\Events\TenancyInitialized::class,

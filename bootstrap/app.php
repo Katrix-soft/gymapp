@@ -11,6 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust all proxies (Easypanel nginx reverse proxy)
+        $middleware->trustProxies(at: '*');
         $middleware->redirectUsersTo(function () {
             if (tenant()) {
                 return request()->segment(1) === 'g'
