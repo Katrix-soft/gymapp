@@ -46,7 +46,7 @@
 
     <!-- Taught Classes for Today -->
     <div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-6 shadow-xl mb-6">
-        <h3 class="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-4">Mis Clases de Hoy</h3>
+        <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Mis Clases de Hoy</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @forelse($todayClasses as $tc)
                 <div class="bg-zinc-950/40 border border-zinc-855 rounded-xl p-4 flex items-center justify-between">
@@ -54,7 +54,7 @@
                         <h4 class="font-extrabold text-sm text-white leading-tight">{{ $tc->name }}</h4>
                         <p class="text-[10px] text-zinc-500 mt-1">Capacidad: {{ $tc->capacity }} cupos</p>
                     </div>
-                    <span class="text-xs font-mono font-bold bg-zinc-850 px-2 py-1 border border-zinc-800 rounded text-zinc-300">
+                    <span class="text-xs font-mono font-bold bg-zinc-800 px-2 py-1 border border-zinc-800 rounded text-zinc-300">
                         {{ substr($tc->start_time, 0, 5) }} - {{ substr($tc->end_time, 0, 5) }}
                     </span>
                 </div>
@@ -76,7 +76,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </span>
-                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar socio por nombre..." class="input input-sm input-bordered w-full bg-zinc-950 border-zinc-850 pl-9 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-lg text-xs" />
+                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar socio por nombre..." class="input input-sm input-bordered w-full bg-zinc-950 border-zinc-800 pl-9 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-lg text-xs" />
             </div>
         </div>
 
@@ -99,11 +99,11 @@
                         <tr class="border-b border-zinc-800/60 hover:bg-zinc-800/20 transition-all duration-150 text-xs">
                             <td class="py-4 pl-6">
                                 <div class="font-extrabold text-white leading-tight">{{ $member->name }}</div>
-                                <div class="text-[10px] text-zinc-550 mt-0.5">{{ $member->email }}</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">{{ $member->email }}</div>
                             </td>
                             <td class="py-4">
                                 @if($activeMem)
-                                    <span class="badge badge-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 font-bold">
+                                    <span class="badge badge-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-bold">
                                         {{ $activeMem->plan->name ?? 'Activo' }}
                                     </span>
                                 @else
@@ -126,7 +126,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center py-12 text-zinc-550">
+                            <td colspan="4" class="text-center py-12 text-zinc-400">
                                 No se encontraron socios en la búsqueda
                             </td>
                         </tr>

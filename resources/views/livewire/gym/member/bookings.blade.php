@@ -58,7 +58,7 @@
                         <h3 class="text-lg font-black text-white group-hover:text-orange-400 transition-colors duration-300">
                             {{ $class['name'] }}
                         </h3>
-                        <span class="text-xs font-mono font-bold bg-zinc-950 px-2.5 py-1 border border-zinc-850 rounded-lg text-zinc-400 shrink-0">
+                        <span class="text-xs font-mono font-bold bg-zinc-950 px-2.5 py-1 border border-zinc-800 rounded-lg text-zinc-400 shrink-0">
                             {{ $class['start_time'] }} - {{ $class['end_time'] }}
                         </span>
                     </div>
@@ -73,11 +73,11 @@
                 <div>
                     <div class="border-t border-zinc-800/60 pt-4 flex items-center justify-between text-xs mb-4">
                         <div>
-                            <span class="text-[9px] text-zinc-550 block uppercase font-bold tracking-wider">Instructor</span>
+                            <span class="text-[9px] text-zinc-400 block uppercase font-bold tracking-wider">Instructor</span>
                             <span class="font-extrabold text-zinc-300">{{ $class['trainer_name'] }}</span>
                         </div>
                         <div class="text-right">
-                            <span class="text-[9px] text-zinc-550 block uppercase font-bold tracking-wider">Disponibilidad</span>
+                            <span class="text-[9px] text-zinc-400 block uppercase font-bold tracking-wider">Disponibilidad</span>
                             <span class="font-extrabold {{ $class['booked_count'] >= $class['capacity'] ? 'text-rose-455' : 'text-zinc-300' }}">
                                 {{ $class['booked_count'] }} / {{ $class['capacity'] }} Cupos
                             </span>
@@ -91,7 +91,7 @@
                                 Cancelar Reserva
                             </button>
                         @elseif($class['booked_count'] >= $class['capacity'])
-                            <button class="btn btn-sm bg-zinc-800 text-zinc-600 border-zinc-850 w-full rounded-xl font-bold cursor-not-allowed" disabled>
+                            <button class="btn btn-sm bg-zinc-800 text-zinc-600 border-zinc-800 w-full rounded-xl font-bold cursor-not-allowed" disabled>
                                 Clase Llena / Sin Cupos
                             </button>
                         @else
@@ -103,8 +103,8 @@
                 </div>
             </div>
         @empty
-            <div class="col-span-full text-center py-16 text-zinc-550">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-750 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <div class="col-span-full text-center py-16 text-zinc-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 <span>No hay clases agendadas para el día de la semana seleccionado.</span>
             </div>
         @endforelse

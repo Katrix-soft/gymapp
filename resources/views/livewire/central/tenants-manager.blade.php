@@ -19,12 +19,12 @@
 
         <!-- Notification banner -->
         @if (session()->has('message'))
-            <div class="alert alert-success bg-emerald-500/10 border-emerald-500/30 text-emerald-450 mb-6 rounded-xl flex items-center justify-between p-4 shadow-lg">
+            <div class="alert alert-success bg-emerald-500/10 border-emerald-500/30 text-emerald-500 mb-6 rounded-xl flex items-center justify-between p-4 shadow-lg">
                 <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span class="text-sm font-semibold">{{ session('message') }}</span>
                 </div>
-                <button class="btn btn-ghost btn-xs btn-circle text-emerald-450">✕</button>
+                <button class="btn btn-ghost btn-xs btn-circle text-emerald-500">✕</button>
             </div>
         @endif
 
@@ -36,7 +36,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </span>
-                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por subdominio/slug..." class="input input-bordered w-full bg-gray-50 dark:bg-zinc-950 border-gray-300 dark:border-zinc-850 pl-10 text-gray-900 dark:text-gray-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
+                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por subdominio/slug..." class="input input-bordered w-full bg-gray-50 dark:bg-zinc-950 border-gray-300 dark:border-zinc-800 pl-10 text-gray-900 dark:text-gray-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
             </div>
         </div>
 
@@ -45,7 +45,7 @@
             <div class="overflow-x-auto">
                 <table class="table w-full text-gray-700 dark:text-zinc-300">
                     <thead>
-                        <tr class="border-b border-gray-200 dark:border-zinc-850 text-gray-500 dark:text-zinc-400 font-bold bg-gray-50 dark:bg-zinc-950/20 text-xs">
+                        <tr class="border-b border-gray-200 dark:border-zinc-800 text-gray-500 dark:text-zinc-400 font-bold bg-gray-50 dark:bg-zinc-950/20 text-xs">
                             <th class="py-4 pl-6">Slug ID (Database)</th>
                             <th class="py-4">Nombre del Gimnasio</th>
                             <th class="py-4">Dominio de Acceso</th>
@@ -62,7 +62,7 @@
                                 <td class="py-4 font-semibold text-gray-800 dark:text-zinc-200">
                                     {{ $tenant->name ?? 'N/A' }}
                                 </td>
-                                <td class="py-4 font-mono text-xs text-orange-550 dark:text-orange-450 hover:underline">
+                                <td class="py-4 font-mono text-xs text-orange-500 dark:text-orange-500 hover:underline">
                                     @php
                                         $domain = $tenant->domains->first()->domain ?? '';
                                     @endphp
@@ -122,7 +122,7 @@
 
                     <!-- Actions -->
                     <div class="mt-6 border-t border-gray-200 dark:border-zinc-800 pt-4 flex justify-end gap-2">
-                        <button wire:click="$set('showCreateModal', false)" class="btn btn-ghost border-gray-300 dark:border-zinc-850 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl text-gray-500 dark:text-zinc-400">Cancelar</button>
+                        <button wire:click="$set('showCreateModal', false)" class="btn btn-ghost border-gray-300 dark:border-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl text-gray-500 dark:text-zinc-400">Cancelar</button>
                         <button wire:click="saveTenant" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6 font-bold shadow-lg shadow-orange-500/10">
                             Registrar y Desplegar
                         </button>

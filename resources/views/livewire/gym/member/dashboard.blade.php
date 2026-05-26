@@ -34,7 +34,7 @@
         <!-- Pass Card -->
         <div class="lg:col-span-2 bg-zinc-900/40 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
             <div>
-                <h3 class="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-4">Estado de tu Pase</h3>
+                <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Estado de tu Pase</h3>
                 @if($activeMembership)
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
@@ -42,7 +42,7 @@
                             <h2 class="text-2xl font-black text-white leading-tight">{{ $activeMembership->plan->name }}</h2>
                             <p class="text-xs text-zinc-500 mt-1">Expira el {{ \Carbon\Carbon::parse($activeMembership->end_date)->format('d/m/Y') }}</p>
                         </div>
-                        <div class="text-left sm:text-right bg-zinc-950/40 border border-zinc-850 px-4 py-3 rounded-xl min-w-[120px]">
+                        <div class="text-left sm:text-right bg-zinc-950/40 border border-zinc-800 px-4 py-3 rounded-xl min-w-[120px]">
                             <div class="text-3xl font-black text-orange-500 leading-none">{{ $daysRemaining }}</div>
                             <span class="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block mt-1">Días Restantes</span>
                         </div>
@@ -80,28 +80,28 @@
         <!-- Body Measurements Summary -->
         <div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
             <div>
-                <h3 class="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-4">Últimas Mediciones Físicas</h3>
+                <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Últimas Mediciones Físicas</h3>
                 @php
                     $last = $measurements->last();
                 @endphp
                 @if($last)
                     <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="bg-zinc-950/40 border border-zinc-850 p-2.5 rounded-xl">
+                        <div class="bg-zinc-950/40 border border-zinc-800 p-2.5 rounded-xl">
                             <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-wider block mb-1">Peso</span>
                             <div class="text-lg font-black text-white">{{ $last->weight }} kg</div>
                         </div>
-                        <div class="bg-zinc-950/40 border border-zinc-850 p-2.5 rounded-xl">
+                        <div class="bg-zinc-950/40 border border-zinc-800 p-2.5 rounded-xl">
                             <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-wider block mb-1">Grasa</span>
-                            <div class="text-lg font-black text-emerald-450">{{ $last->body_fat_percentage }}%</div>
+                            <div class="text-lg font-black text-emerald-500">{{ $last->body_fat_percentage }}%</div>
                         </div>
-                        <div class="bg-zinc-950/40 border border-zinc-850 p-2.5 rounded-xl">
+                        <div class="bg-zinc-950/40 border border-zinc-800 p-2.5 rounded-xl">
                             <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-wider block mb-1">Músculo</span>
-                            <div class="text-lg font-black text-orange-450">{{ $last->muscle_mass_percentage }}%</div>
+                            <div class="text-lg font-black text-orange-500">{{ $last->muscle_mass_percentage }}%</div>
                         </div>
                     </div>
                     <p class="text-[10px] text-zinc-500 text-center mt-4">Registrado el {{ \Carbon\Carbon::parse($last->logged_at)->format('d/m/Y') }}</p>
                 @else
-                    <div class="text-center py-6 text-zinc-550">
+                    <div class="text-center py-6 text-zinc-400">
                         <span class="text-xs">No hay mediciones físicas registradas aún</span>
                     </div>
                 @endif
@@ -119,23 +119,23 @@
         
         <!-- Bookings Column -->
         <div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-6 shadow-xl">
-            <h3 class="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-4">Mis Próximas Clases</h3>
+            <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Mis Próximas Clases</h3>
             <div class="space-y-3">
                 @forelse($upcomingBookings as $booking)
-                    <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-3.5 flex items-center justify-between">
+                    <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-3.5 flex items-center justify-between">
                         <div>
                             <span class="text-[9px] font-bold text-orange-500 uppercase tracking-widest block mb-0.5">{{ \Carbon\Carbon::parse($booking->date)->format('d/m/Y') }}</span>
                             <h4 class="font-extrabold text-sm text-white leading-tight">{{ $booking->gymClass->name }}</h4>
                             <p class="text-[10px] text-zinc-500 mt-1">Profesor: {{ $booking->gymClass->trainer->name ?? 'Instructor' }}</p>
                         </div>
                         <div class="text-right">
-                            <span class="text-xs font-mono font-bold bg-zinc-850 px-2 py-1 border border-zinc-800 rounded text-zinc-300">
+                            <span class="text-xs font-mono font-bold bg-zinc-800 px-2 py-1 border border-zinc-800 rounded text-zinc-300">
                                 {{ substr($booking->gymClass->start_time, 0, 5) }} - {{ substr($booking->gymClass->end_time, 0, 5) }}
                             </span>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-10 text-zinc-655">
+                    <div class="text-center py-10 text-zinc-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-zinc-800 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         <span class="text-xs">No tienes clases reservadas para esta semana</span>
                     </div>
@@ -146,14 +146,14 @@
         <!-- Routine Column -->
         <div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
             <div>
-                <h3 class="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-4">Entrenamiento de Hoy</h3>
+                <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Entrenamiento de Hoy</h3>
                 
-                <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-5 text-center">
+                <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-5 text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-orange-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                     <h4 class="font-extrabold text-white text-base leading-tight">¿Listo para entrenar?</h4>
-                    <p class="text-xs text-zinc-550 max-w-xs mx-auto mt-2">Inicia el Workout Player interactivo para registrar tus series de hoy y cronometrar tus descansos.</p>
+                    <p class="text-xs text-zinc-400 max-w-xs mx-auto mt-2">Inicia el Workout Player interactivo para registrar tus series de hoy y cronometrar tus descansos.</p>
                 </div>
             </div>
 

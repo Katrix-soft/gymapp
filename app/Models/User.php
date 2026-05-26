@@ -29,6 +29,7 @@ class User extends Authenticatable
         'profile_photo_url',
         'gym_code',
         'status',
+        'biometric_credential_id',
     ];
 
     /**

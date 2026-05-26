@@ -27,16 +27,17 @@
         <!-- PWA Settings -->
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="Arkhon Gym">
-        <link rel="apple-touch-icon" href="/icon-192.png">
-        <link rel="manifest" href="/manifest.json">
+        <meta name="apple-mobile-web-app-title" content="{{ tenant('name') ?? 'Arkhon Gym' }}">
+        <link rel="apple-touch-icon" href="{{ \App\Models\TenantConfig::get('logo_url') ?: '/icon-192.png' }}">
+        <link rel="manifest" href="{{ request()->segment(1) === 'g' ? '/g/' . tenant('id') . '/manifest.json' : '/manifest.json' }}">
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="antialiased min-h-screen text-zinc-100 selection:bg-orange-500 selection:text-white">
-        
+        <!-- Toast Notifications -->
+        <x-toast-notifications />
         <div class="drawer lg:drawer-open">
             <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
             
@@ -89,6 +90,11 @@
                                     {{ auth()->user()->name }}
                                 </li>
                                 <div class="h-px bg-zinc-800 my-1"></div>
+                                <li>
+                                    <a href="{{ request()->segment(1) === 'g' ? '/g/' . tenant('id') . '/profile' : '/profile' }}" class="text-zinc-300 hover:text-white hover:bg-zinc-800">
+                                        Mi Perfil
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{{ request()->segment(1) === 'g' ? '/g/' . tenant('id') . '/logout' : '/logout' }}" class="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10">
                                         Cerrar Sesión

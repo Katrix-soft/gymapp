@@ -2,6 +2,7 @@
 
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -48,9 +49,47 @@ new #[Layout('layouts.guest')] class extends Component
 
         $this->redirectIntended(default: $redirectUrl, navigate: true);
     }
+
+    /**
+     * Authenticate user with their biometric credential ID
+     */
+    public function loginWithBiometrics(string $credentialId): void
+    {
+        // Search user in tenant context first
+        $user = \App\Models\User::where('biometric_credential_id', $credentialId)->first();
+
+        // If not found, try central context
+        if (!$user) {
+            $user = \App\Models\CentralUser::where('biometric_credential_id', $credentialId)->first();
+        }
+
+        if (!$user) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'form.email' => 'Acceso biométrico no reconocido en esta cuenta o dispositivo.',
+            ]);
+        }
+
+        // Authenticate the user directly
+        Auth::login($user, remember: true);
+
+        Session::regenerate();
+
+        logger()->info('Login biométrico exitoso', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'ip' => request()->ip(),
+            'tenant' => tenant('id') ?? 'central',
+        ]);
+
+        $redirectUrl = tenant() && request()->segment(1) === 'g'
+            ? '/g/' . tenant('id') . '/dashboard'
+            : route('dashboard', absolute: false);
+
+        $this->redirectIntended(default: $redirectUrl, navigate: true);
+    }
 }; ?>
 
-<div>
+<div x-data="biometricLogin()">
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -155,6 +194,21 @@ new #[Layout('layouts.guest')] class extends Component
             @endif
         </div>
 
+        <!-- Biometric Quick Login Button -->
+        <template x-if="hasBiometrics">
+            <button
+                type="button"
+                @click="authenticateBiometrics()"
+                class="w-full py-3 px-6 bg-orange-500/10 hover:bg-orange-500/25 border border-orange-500/30 hover:border-orange-500/50 text-orange-400 font-semibold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 group"
+                :disabled="loading"
+            >
+                <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 009 11a13.917 13.917 0 00-2.3-7.551m3.854 8.046a12.09 12.09 0 011.07 1.05m-3.97-1.05a12.47 12.47 0 00-1.123-8.32m2.91 8.32a12.422 12.422 0 01-1.082 5.53m1.538-12.2a12.093 12.093 0 01-1.08 1.058m1.586-.072A12.09 12.09 0 0115 11c0 3.06 1.007 5.885 2.71 8.12M9 11V9m15-1a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span x-text="loading ? 'Verificando huella/rostro...' : 'INGRESAR CON HUELLA / ROSTRO'"></span>
+            </button>
+        </template>
+
         <!-- Submit Button -->
         <button
             type="submit"
@@ -188,3 +242,43 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
     </form>
 </div>
+
+<script>
+function biometricLogin() {
+    return {
+        hasBiometrics: false,
+        loading: false,
+        biometrics: null,
+
+        init() {
+            setTimeout(() => {
+                if (!window.KatrixBiometrics) return;
+
+                this.biometrics = new window.KatrixBiometrics({
+                    appName: '{{ tenant() ? addslashes(tenant("name")) : "SaaS Gym Central" }}'
+                });
+
+                const status = this.biometrics.getStatus();
+                if (status.available && status.linked && status.credentialId) {
+                    this.hasBiometrics = true;
+                }
+            }, 600);
+        },
+
+        async authenticateBiometrics() {
+            if (!this.biometrics) return;
+            this.loading = true;
+
+            const result = await this.biometrics.authenticate();
+            this.loading = false;
+
+            if (result.success) {
+                const credId = this.biometrics.getStatus().credentialId;
+                @this.call('loginWithBiometrics', credId);
+            } else {
+                alert(`Error en verificación biométrica: ${result.error.message}`);
+            }
+        }
+    }
+}
+</script>

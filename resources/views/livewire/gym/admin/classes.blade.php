@@ -37,7 +37,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </span>
-                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar clase por nombre..." class="input input-bordered w-full bg-zinc-950 border-zinc-850 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
+                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar clase por nombre..." class="input input-bordered w-full bg-zinc-950 border-zinc-800 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
             </div>
 
             <!-- Day Filter -->
@@ -92,12 +92,12 @@
                             </div>
                             <div>
                                 <div class="font-bold text-zinc-300 leading-none">{{ $class->trainer->name ?? 'Prof. No asignado' }}</div>
-                                <span class="text-[9px] text-zinc-550">Instructor</span>
+                                <span class="text-[9px] text-zinc-400">Instructor</span>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="font-bold text-zinc-300">{{ $class->capacity }}</div>
-                            <span class="text-[9px] text-zinc-550">Cupos Máx.</span>
+                            <span class="text-[9px] text-zinc-400">Cupos Máx.</span>
                         </div>
                     </div>
 
@@ -117,8 +117,8 @@
                 </div>
             </div>
         @empty
-            <div class="col-span-full text-center py-16 text-zinc-550">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-750 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <div class="col-span-full text-center py-16 text-zinc-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 <span class="text-zinc-500">No se encontraron clases agendadas en este filtro</span>
             </div>
         @endforelse
@@ -213,7 +213,7 @@
 
                 <!-- Action Buttons -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end gap-2">
-                    <button wire:click="$set('showCreateEditModal', false)" class="btn btn-ghost border-zinc-850 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
+                    <button wire:click="$set('showCreateEditModal', false)" class="btn btn-ghost border-zinc-800 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
                     <button wire:click="saveClass" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6">
                         Guardar
                     </button>
@@ -272,7 +272,7 @@
                 <div class="overflow-y-auto pr-1 flex-grow">
                     <table class="table table-xs w-full text-zinc-300">
                         <thead>
-                            <tr class="border-b border-zinc-850 text-zinc-450 font-bold uppercase text-[10px]">
+                            <tr class="border-b border-zinc-800 text-zinc-450 font-bold uppercase text-[10px]">
                                 <th class="py-3">Socio</th>
                                 <th class="py-3 text-center">Tipo Registro</th>
                                 <th class="py-3 text-right">Estado Asistencia</th>
@@ -292,10 +292,10 @@
                                     </td>
                                     <td class="py-3 text-right">
                                         <div class="flex items-center justify-end gap-1.5">
-                                            <button wire:click="toggleAttendance({{ $record['user_id'] }}, 'present')" class="btn btn-xs rounded {{ $record['status'] === 'present' || $record['status'] === 'checked_in' ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-none font-bold' : 'btn-ghost border border-zinc-800 text-zinc-500 hover:bg-zinc-850' }}">
+                                            <button wire:click="toggleAttendance({{ $record['user_id'] }}, 'present')" class="btn btn-xs rounded {{ $record['status'] === 'present' || $record['status'] === 'checked_in' ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-none font-bold' : 'btn-ghost border border-zinc-800 text-zinc-500 hover:bg-zinc-800' }}">
                                                 Presente
                                             </button>
-                                            <button wire:click="toggleAttendance({{ $record['user_id'] }}, 'absent')" class="btn btn-xs rounded {{ $record['status'] === 'absent' ? 'bg-rose-500 hover:bg-rose-600 text-white border-none font-bold' : 'btn-ghost border border-zinc-800 text-zinc-500 hover:bg-zinc-850' }}">
+                                            <button wire:click="toggleAttendance({{ $record['user_id'] }}, 'absent')" class="btn btn-xs rounded {{ $record['status'] === 'absent' ? 'bg-rose-500 hover:bg-rose-600 text-white border-none font-bold' : 'btn-ghost border border-zinc-800 text-zinc-500 hover:bg-zinc-800' }}">
                                                 Ausente
                                             </button>
                                         </div>
@@ -303,7 +303,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center py-10 text-zinc-550">Sin reservas ni check-ins para este día</td>
+                                    <td colspan="3" class="text-center py-10 text-zinc-400">Sin reservas ni check-ins para este día</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -312,7 +312,7 @@
 
                 <!-- Modal Actions -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end">
-                    <button wire:click="$set('showAttendanceModal', false)" class="btn bg-zinc-850 hover:bg-zinc-800 text-white border-zinc-800 rounded-xl px-6">
+                    <button wire:click="$set('showAttendanceModal', false)" class="btn bg-zinc-800 hover:bg-zinc-800 text-white border-zinc-800 rounded-xl px-6">
                         Cerrar Registro
                     </button>
                 </div>

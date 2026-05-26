@@ -40,7 +40,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </span>
-            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar rutinas por nombre o socio..." class="input input-bordered w-full bg-zinc-950 border-zinc-850 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
+            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar rutinas por nombre o socio..." class="input input-bordered w-full bg-zinc-950 border-zinc-800 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
         </div>
     </div>
 
@@ -57,7 +57,7 @@
                                 {{ $routine->name }}
                             </h3>
                         </div>
-                        <span class="text-xs bg-zinc-950 px-2.5 py-1 border border-zinc-850 rounded-lg text-zinc-400">
+                        <span class="text-xs bg-zinc-950 px-2.5 py-1 border border-zinc-800 rounded-lg text-zinc-400">
                             {{ count($routine->days) }} {{ count($routine->days) === 1 ? 'Día' : 'Días' }}
                         </span>
                     </div>
@@ -70,10 +70,10 @@
                     <!-- Days Preview -->
                     <div class="space-y-2 mb-6">
                         @foreach($routine->days as $day)
-                            <div class="bg-zinc-950/40 p-2.5 rounded-lg border border-zinc-850/80 text-xs">
+                            <div class="bg-zinc-950/40 p-2.5 rounded-lg border border-zinc-800/80 text-xs">
                                 <div class="font-bold text-white mb-1.5 flex justify-between items-center">
                                     <span>{{ $day->name }}</span>
-                                    <span class="text-[10px] text-zinc-550">{{ count($day->routineExercises) }} ej.</span>
+                                    <span class="text-[10px] text-zinc-400">{{ count($day->routineExercises) }} ej.</span>
                                 </div>
                                 <div class="text-[10px] text-zinc-500 flex flex-wrap gap-x-2 gap-y-1">
                                     @foreach($day->routineExercises as $re)
@@ -89,9 +89,9 @@
 
                 <!-- Footer / Actions -->
                 <div class="border-t border-zinc-800/60 pt-4 flex items-center justify-between">
-                    <span class="text-[10px] text-zinc-550">Creado por: {{ $routine->trainer->name ?? 'Profesor' }}</span>
+                    <span class="text-[10px] text-zinc-400">Creado por: {{ $routine->trainer->name ?? 'Profesor' }}</span>
                     <div class="flex items-center gap-1.5">
-                        <button wire:click="openEditModal({{ $routine->id }})" class="btn btn-xs btn-ghost btn-circle text-orange-500 hover:text-orange-450" title="Editar Rutina">
+                        <button wire:click="openEditModal({{ $routine->id }})" class="btn btn-xs btn-ghost btn-circle text-orange-500 hover:text-orange-500" title="Editar Rutina">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         </button>
                         <button onclick="confirm('¿Eliminar esta rutina?') || event.stopImmediatePropagation()" wire:click="deleteRoutine({{ $routine->id }})" class="btn btn-xs btn-ghost btn-circle text-rose-500 hover:text-rose-455" title="Eliminar Rutina">
@@ -101,8 +101,8 @@
                 </div>
             </div>
         @empty
-            <div class="col-span-full text-center py-16 text-zinc-550">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-750 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
+            <div class="col-span-full text-center py-16 text-zinc-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
                 <span>No se encontraron planes de rutina creados</span>
             </div>
         @endforelse
@@ -149,7 +149,7 @@
                                         <button wire:click="selectMember({{ $sm->id }}, '{{ $sm->name }}')" class="w-full text-left p-2 hover:bg-zinc-800 rounded-lg flex items-center justify-between text-xs text-zinc-300">
                                             <div>
                                                 <div class="font-bold text-white">{{ $sm->name }}</div>
-                                                <div class="text-[10px] text-zinc-550">{{ $sm->email }}</div>
+                                                <div class="text-[10px] text-zinc-400">{{ $sm->email }}</div>
                                             </div>
                                             <span class="text-[9px] font-bold text-zinc-500">Seleccionar</span>
                                         </button>
@@ -183,7 +183,7 @@
                         </h4>
 
                         @foreach($days as $dayIndex => $dayData)
-                            <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-5 relative space-y-4">
+                            <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-5 relative space-y-4">
                                 <!-- Day header -->
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-3">
                                     <div class="flex items-center gap-2">
@@ -191,7 +191,7 @@
                                         <input type="text" wire:model="days.{{ $dayIndex }}.name" class="bg-transparent text-sm font-extrabold text-white focus:outline-none border-b border-dashed border-zinc-700 focus:border-orange-500 max-w-xs" />
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button type="button" wire:click="addExerciseToDay({{ $dayIndex }})" class="btn btn-xs bg-orange-500/10 border-orange-500/20 text-orange-450 hover:bg-orange-500 hover:text-white rounded-lg">
+                                        <button type="button" wire:click="addExerciseToDay({{ $dayIndex }})" class="btn btn-xs bg-orange-500/10 border-orange-500/20 text-orange-500 hover:bg-orange-500 hover:text-white rounded-lg">
                                             + Ejercicio
                                         </button>
                                         @if(count($days) > 1)
@@ -263,7 +263,7 @@
 
                 <!-- Form Action Buttons -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end gap-2">
-                    <button wire:click="$set('showCreateModal', false)" class="btn btn-ghost border-zinc-850 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
+                    <button wire:click="$set('showCreateModal', false)" class="btn btn-ghost border-zinc-800 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
                     <button wire:click="saveRoutine" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6">
                         Guardar Rutina
                     </button>
@@ -316,7 +316,7 @@
 
                 <!-- Action Buttons -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end gap-2">
-                    <button wire:click="$set('showAddExerciseModal', false)" class="btn btn-ghost border-zinc-850 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
+                    <button wire:click="$set('showAddExerciseModal', false)" class="btn btn-ghost border-zinc-800 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
                     <button wire:click="createExercise" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6">
                         Registrar Ejercicio
                     </button>

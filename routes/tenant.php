@@ -43,6 +43,42 @@ Route::get('/logout', function (\App\Livewire\Actions\Logout $logout) {
     return redirect($prefix . '/login');
 })->name('logout');
 
+Route::get('/profile', function () {
+    return view('tenant-profile');
+})->middleware(['auth'])->name('profile');
+
+Route::get('/manifest.json', function () {
+    $gymName = \App\Models\TenantConfig::get('gym_name', 'SaaS Gym');
+    $brandColor = \App\Models\TenantConfig::get('brand_color', '#f97316');
+    $logoUrl = \App\Models\TenantConfig::get('logo_url') ?: '/icon-192.png';
+    $prefix = request()->segment(1) === 'g' ? '/g/' . tenant('id') : '';
+
+    return response()->json([
+        'name' => $gymName . ' Portal',
+        'short_name' => $gymName,
+        'description' => 'Tu portal de socios para reservar clases, ver rutinas y realizar pagos.',
+        'start_url' => $prefix . '/dashboard',
+        'display' => 'standalone',
+        'background_color' => '#09090b',
+        'theme_color' => $brandColor,
+        'orientation' => 'portrait',
+        'icons' => [
+            [
+                'src' => $logoUrl,
+                'sizes' => '192x192',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ],
+            [
+                'src' => $logoUrl,
+                'sizes' => '512x512',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ]
+        ]
+    ]);
+});
+
 // Gym Admin Portal
 Route::middleware(['auth', 'role:gym_admin'])->prefix('admin')->name('gym.admin.')->group(function () {
     Route::get('/dashboard', \App\Livewire\Gym\Admin\Dashboard::class)->name('dashboard');

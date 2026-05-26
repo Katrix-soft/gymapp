@@ -15,6 +15,7 @@ class CentralUser extends Authenticatable
         'name',
         'email',
         'password',
+        'biometric_credential_id',
     ];
 
     protected $hidden = [

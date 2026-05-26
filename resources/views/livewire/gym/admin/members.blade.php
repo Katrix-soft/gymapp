@@ -37,7 +37,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </span>
-                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por nombre, email o código..." class="input input-bordered w-full bg-zinc-950 border-zinc-850 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
+                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por nombre, email o código..." class="input input-bordered w-full bg-zinc-950 border-zinc-800 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
             </div>
 
             <!-- Bulk actions toolbar -->
@@ -88,7 +88,7 @@
                             <td class="py-4">
                                 <div class="flex items-center gap-3">
                                     <div class="avatar placeholder">
-                                        <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-750 flex items-center justify-center text-orange-500 font-extrabold shadow-inner">
+                                        <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-orange-500 font-extrabold shadow-inner">
                                             {{ strtoupper(substr($member->first_name, 0, 1)) }}{{ strtoupper(substr($member->last_name, 0, 1)) }}
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                                     </div>
                                     <div class="text-[10px] text-zinc-500 mt-1">Vence: {{ \Carbon\Carbon::parse($member->activeMembership->end_date)->format('d/m/Y') }}</div>
                                 @else
-                                    <span class="badge badge-sm bg-zinc-800 border-zinc-750 text-zinc-500">Sin pase activo</span>
+                                    <span class="badge badge-sm bg-zinc-800 border-zinc-700 text-zinc-500">Sin pase activo</span>
                                 @endif
                             </td>
                             <td class="py-4">
@@ -225,7 +225,7 @@
 
                 <!-- Form Action Buttons -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end gap-2">
-                    <button wire:click="$set('showCreateEditModal', false)" class="btn btn-ghost border-zinc-850 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
+                    <button wire:click="$set('showCreateEditModal', false)" class="btn btn-ghost border-zinc-800 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
                     <button wire:click="saveMember" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6">
                         Guardar
                     </button>
@@ -267,7 +267,7 @@
                     <!-- Left Column details -->
                     <div class="space-y-6">
                         <!-- Membership card -->
-                        <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-5">
+                        <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-5">
                             <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
                                 Historial de Pases / Membresías
@@ -290,7 +290,7 @@
                         </div>
 
                         <!-- Payments card -->
-                        <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-5">
+                        <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-5">
                             <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 Historial de Pagos
@@ -300,7 +300,7 @@
                                     <div class="flex justify-between items-center bg-zinc-900/60 p-3 rounded-lg border border-zinc-800/80">
                                         <div>
                                             <div class="font-extrabold text-sm text-emerald-400">${{ number_format($payment->amount, 0, ',', '.') }}</div>
-                                            <div class="text-[10px] text-zinc-550 mt-0.5">Método: {{ $payment->payment_method ?? 'MercadoPago' }} | Ref: {{ substr($payment->external_reference ?? 'N/A', 0, 12) }}</div>
+                                            <div class="text-[10px] text-zinc-400 mt-0.5">Método: {{ $payment->payment_method ?? 'MercadoPago' }} | Ref: {{ substr($payment->external_reference ?? 'N/A', 0, 12) }}</div>
                                         </div>
                                         <div class="text-right">
                                             <span class="badge badge-xs {{ $payment->status === 'paid' ? 'badge-success text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'badge-warning text-amber-400 bg-amber-500/10 border-amber-500/20' }}">
@@ -319,7 +319,7 @@
                     <!-- Right Column details -->
                     <div class="space-y-6">
                         <!-- Physical Measurements -->
-                        <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-5">
+                        <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-5">
                             <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" /></svg>
                                 Seguimiento Físico / Medidas
@@ -353,7 +353,7 @@
                         </div>
 
                         <!-- Attendance history -->
-                        <div class="bg-zinc-950/40 border border-zinc-850 rounded-xl p-5">
+                        <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-5">
                             <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 Historial de Asistencias (Últimas 10)
@@ -375,7 +375,7 @@
 
                 <!-- Modal Actions -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end">
-                    <button wire:click="$set('showProfileModal', false)" class="btn bg-zinc-850 hover:bg-zinc-800 text-white border-zinc-800 rounded-xl px-6">
+                    <button wire:click="$set('showProfileModal', false)" class="btn bg-zinc-800 hover:bg-zinc-800 text-white border-zinc-800 rounded-xl px-6">
                         Cerrar Ficha
                     </button>
                 </div>

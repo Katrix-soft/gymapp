@@ -23,8 +23,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-title" content="Arkhon Gym">
-        <link rel="apple-touch-icon" href="/icon-192.png">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="apple-touch-icon" href="{{ tenant() ? (\App\Models\TenantConfig::get('logo_url') ?: '/icon-192.png') : '/icon-192.png' }}">
+        <link rel="manifest" href="{{ tenant() && request()->segment(1) === 'g' ? '/g/' . tenant('id') . '/manifest.json' : '/manifest.json' }}">
 
         @php
             $brandColor = tenant() ? \App\Models\TenantConfig::get('brand_color', '#FF6B35') : '#FF6B35';

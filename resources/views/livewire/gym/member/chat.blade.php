@@ -26,12 +26,12 @@
             </div>
 
             <!-- Contacts Loop -->
-            <div class="overflow-y-auto flex-grow divide-y divide-zinc-850/45 p-2 space-y-1">
+            <div class="overflow-y-auto flex-grow divide-y divide-zinc-800/45 p-2 space-y-1">
                 @forelse($contacts as $contact)
                     <button wire:click="selectChat({{ $contact['id'] }})" class="w-full text-left p-3 rounded-xl flex items-start gap-3 transition-all duration-200 {{ $activeUserId === $contact['id'] ? 'bg-orange-500/10 border border-orange-500/25' : 'border border-transparent hover:bg-zinc-800/30' }}">
                         <!-- Avatar -->
                         <div class="avatar placeholder relative">
-                            <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-750 flex items-center justify-center text-xs font-black text-orange-550 uppercase">
+                            <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-black text-orange-500 uppercase">
                                 {{ strtoupper(substr($contact['name'], 0, 1)) }}{{ strtoupper(substr(strrchr($contact['name'], ' ') ?: ' ', 1, 1)) }}
                             </div>
                             @if($contact['unread_count'] > 0)
@@ -45,7 +45,7 @@
                         <div class="flex-grow min-w-0">
                             <div class="flex justify-between items-baseline mb-0.5">
                                 <span class="font-extrabold text-sm text-white truncate pr-2">{{ $contact['name'] }}</span>
-                                <span class="text-[9px] text-zinc-550 shrink-0 font-mono">
+                                <span class="text-[9px] text-zinc-400 shrink-0 font-mono">
                                     {{ $contact['last_message_time'] ? \Carbon\Carbon::parse($contact['last_message_time'])->diffForHumans(null, true) : '' }}
                                 </span>
                             </div>
@@ -62,7 +62,7 @@
                         </div>
                     </button>
                 @empty
-                    <div class="text-center py-8 text-xs text-zinc-655">No se encontraron contactos de staff</div>
+                    <div class="text-center py-8 text-xs text-zinc-500">No se encontraron contactos de staff</div>
                 @endforelse
             </div>
         </div>
@@ -81,7 +81,7 @@
                         </div>
                         <div>
                             <div class="font-extrabold text-white leading-tight">{{ $activeUser->name }}</div>
-                            <span class="text-[10px] text-zinc-550 capitalize">{{ $activeUser->roles->first()->name === 'gym_admin' ? 'Administrador del Gym' : 'Instructor Técnico' }}</span>
+                            <span class="text-[10px] text-zinc-400 capitalize">{{ $activeUser->roles->first()->name === 'gym_admin' ? 'Administrador del Gym' : 'Instructor Técnico' }}</span>
                         </div>
                     </div>
                 </div>
@@ -94,10 +94,10 @@
                         @endphp
                         <div class="flex {{ $isMe ? 'justify-end' : 'justify-start' }} w-full">
                             <div class="max-w-[70%] flex flex-col {{ $isMe ? 'items-end' : 'items-start' }}">
-                                <div class="px-4 py-2.5 rounded-2xl text-xs {{ $isMe ? 'bg-orange-500 text-white rounded-br-none shadow-lg shadow-orange-500/5' : 'bg-zinc-800 border border-zinc-750 text-zinc-100 rounded-bl-none' }}">
+                                <div class="px-4 py-2.5 rounded-2xl text-xs {{ $isMe ? 'bg-orange-500 text-white rounded-br-none shadow-lg shadow-orange-500/5' : 'bg-zinc-800 border border-zinc-700 text-zinc-100 rounded-bl-none' }}">
                                     <p class="leading-relaxed whitespace-pre-line">{{ $msg['message'] }}</p>
                                 </div>
-                                <span class="text-[9px] text-zinc-550 mt-1 font-mono">
+                                <span class="text-[9px] text-zinc-400 mt-1 font-mono">
                                     {{ \Carbon\Carbon::parse($msg['created_at'])->format('H:i') }}
                                     @if($isMe)
                                         <span class="ml-1 text-zinc-600 font-bold">{{ $msg['read_at'] ? 'Leído' : 'Enviado' }}</span>
@@ -106,7 +106,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="text-center py-20 text-zinc-655 text-xs">Escribe una pregunta para iniciar el contacto con el staff técnico</div>
+                        <div class="text-center py-20 text-zinc-500 text-xs">Escribe una pregunta para iniciar el contacto con el staff técnico</div>
                     @endforelse
                 </div>
 
@@ -128,7 +128,7 @@
                         </svg>
                     </div>
                     <h3 class="text-base font-extrabold text-white">Soporte y Consultas</h3>
-                    <p class="text-xs text-zinc-550 max-w-xs mt-1.5 leading-relaxed">Selecciona un instructor o administrador del panel izquierdo para enviarles un mensaje directo.</p>
+                    <p class="text-xs text-zinc-400 max-w-xs mt-1.5 leading-relaxed">Selecciona un instructor o administrador del panel izquierdo para enviarles un mensaje directo.</p>
                 </div>
             @endif
 

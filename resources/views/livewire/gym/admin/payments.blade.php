@@ -56,7 +56,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </span>
-                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar pagos por socio..." class="input input-bordered w-full bg-zinc-950 border-zinc-850 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
+                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar pagos por socio..." class="input input-bordered w-full bg-zinc-950 border-zinc-800 pl-10 text-zinc-100 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl" />
                 </div>
 
                 <!-- Status Filter -->
@@ -91,7 +91,7 @@
                             <tr class="border-b border-zinc-800/60 hover:bg-zinc-800/20 transition-all duration-150">
                                 <td class="py-4 pl-6">
                                     <div class="font-extrabold text-white leading-tight">{{ $payment->user->name ?? 'Usuario Eliminado' }}</div>
-                                    <div class="text-xs text-zinc-550 mt-0.5">{{ $payment->user->email ?? '' }}</div>
+                                    <div class="text-xs text-zinc-400 mt-0.5">{{ $payment->user->email ?? '' }}</div>
                                 </td>
                                 <td class="py-4 font-bold text-white text-base">
                                     ${{ number_format($payment->amount, 0, ',', '.') }}
@@ -116,8 +116,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-16 text-zinc-550">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-750 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <td colspan="6" class="text-center py-16 text-zinc-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     <span>No se registran transacciones de pago en esta vista</span>
                                 </td>
                             </tr>
@@ -153,12 +153,12 @@
 
                     <div>
                         <div class="border-t border-zinc-800/60 pt-4 flex items-center justify-between mb-4">
-                            <span class="text-xs text-zinc-550 font-bold uppercase tracking-wider">Precio del Plan</span>
+                            <span class="text-xs text-zinc-400 font-bold uppercase tracking-wider">Precio del Plan</span>
                             <span class="text-2xl font-black text-white">${{ number_format($plan->price, 0, ',', '.') }}</span>
                         </div>
                         
                         <div class="flex items-center justify-end gap-2 border-t border-zinc-800/60 pt-4">
-                            <button wire:click="openPlanEditModal({{ $plan->id }})" class="btn btn-sm btn-ghost btn-circle text-orange-500 hover:text-orange-450">
+                            <button wire:click="openPlanEditModal({{ $plan->id }})" class="btn btn-sm btn-ghost btn-circle text-orange-500 hover:text-orange-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </button>
                             <button onclick="confirm('¿Eliminar esta plantilla de plan?') || event.stopImmediatePropagation()" wire:click="deletePlan({{ $plan->id }})" class="btn btn-sm btn-ghost btn-circle text-rose-500 hover:text-rose-455">
@@ -168,8 +168,8 @@
                     </div>
                 </div>
             @empty
-                <div class="col-span-full text-center py-16 text-zinc-550">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-750 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
+                <div class="col-span-full text-center py-16 text-zinc-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-zinc-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
                     <span>No se registran plantillas de planes de membresía</span>
                 </div>
             @endforelse
@@ -265,7 +265,7 @@
 
                 <!-- Action Buttons -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end gap-2">
-                    <button wire:click="$set('showAssignModal', false)" class="btn btn-ghost border-zinc-850 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
+                    <button wire:click="$set('showAssignModal', false)" class="btn btn-ghost border-zinc-800 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
                     <button wire:click="assignMembership" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6">
                         Registrar Pase
                     </button>
@@ -324,7 +324,7 @@
 
                 <!-- Action Buttons -->
                 <div class="mt-6 border-t border-zinc-800 pt-4 flex justify-end gap-2">
-                    <button wire:click="$set('showPlanModal', false)" class="btn btn-ghost border-zinc-850 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
+                    <button wire:click="$set('showPlanModal', false)" class="btn btn-ghost border-zinc-800 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white">Cancelar</button>
                     <button wire:click="savePlan" class="btn bg-orange-500 hover:bg-orange-600 border-none text-white rounded-xl px-6">
                         Guardar Plan
                     </button>

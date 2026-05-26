@@ -5,10 +5,10 @@
         <div class="text-center mb-6">
             <span class="text-[9px] font-black text-orange-500 uppercase tracking-widest bg-orange-500/10 border border-orange-500/25 px-2.5 py-1 rounded-lg">Sandbox de Pruebas</span>
             <h2 class="text-2xl font-black text-white mt-4">Simulación MercadoPago</h2>
-            <p class="text-xs text-zinc-550 mt-1">Estás simulando una pasarela de pago para el cobro de tu membresía.</p>
+            <p class="text-xs text-zinc-400 mt-1">Estás simulando una pasarela de pago para el cobro de tu membresía.</p>
         </div>
 
-        <div class="bg-zinc-950/50 p-4 border border-zinc-850 rounded-2xl mb-6 text-xs space-y-3">
+        <div class="bg-zinc-950/50 p-4 border border-zinc-800 rounded-2xl mb-6 text-xs space-y-3">
             <div class="flex justify-between items-center">
                 <span class="text-zinc-500">Plan Seleccionado:</span>
                 <span class="font-bold text-white">{{ $plan->name }}</span>
@@ -17,7 +17,7 @@
                 <span class="text-zinc-500">Duración:</span>
                 <span class="font-bold text-zinc-300 font-mono">{{ $plan->duration_months }} {{ $plan->duration_months === 1 ? 'Mes' : 'Meses' }}</span>
             </div>
-            <div class="flex justify-between items-center border-t border-zinc-850/80 pt-3">
+            <div class="flex justify-between items-center border-t border-zinc-800/80 pt-3">
                 <span class="text-zinc-500 font-bold">Total a Pagar:</span>
                 <span class="text-lg font-black text-white">${{ number_format($plan->price, 0, ',', '.') }}</span>
             </div>
@@ -44,7 +44,7 @@
 
     @if($simulationStatus === 'success')
         <div class="text-center py-6">
-            <div class="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 flex items-center justify-center mx-auto mb-4">
+            <div class="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
